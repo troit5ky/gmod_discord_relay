@@ -6,3 +6,6 @@
 3. Install this addon
 4. Configurate in discord-realy/lua/cl_config.lua and discord-realy/lua/sv_config.lua
 5. Done! Restart server
+
+### Preview
+![preview](preview/1.png)
