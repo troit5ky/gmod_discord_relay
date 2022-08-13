@@ -32,7 +32,7 @@ local function getAvatar(id, co)
 end
 
 local function formMsg(ply, str)
-	local id = ply:SteamID64()
+	local id = ply:SteamID()
 
 	local co = coroutine.create(function() 
 		local form = {
@@ -80,6 +80,8 @@ local function plyFrstSpawn(ply)
 end
 
 local function plyDisconnect(ply)
+	if tmpAvatars[ply.networkid] then tmpAvatars[ply.networkid] = nil end
+
 	local form = {
 		["username"] = Discord.hookname,
 		["embeds"] = {{
