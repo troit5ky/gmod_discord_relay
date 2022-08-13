@@ -32,7 +32,7 @@ local function getAvatar(id, co)
 end
 
 local function formMsg(ply, str)
-	local id = ply:SteamID()
+	local id = tostring(ply:SteamID64())
 
 	local co = coroutine.create(function() 
 		local form = {
