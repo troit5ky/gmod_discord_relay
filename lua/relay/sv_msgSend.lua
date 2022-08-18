@@ -49,10 +49,9 @@ local function formMsg(ply, str)
 
 	if tmpAvatars[id] == nil then 
 		getAvatar(id, co)
-		return
+	else 
+		coroutine.resume(co)
 	end
-
-	coroutine.resume(co)
 end
 
 local function playerConnect(ply)
