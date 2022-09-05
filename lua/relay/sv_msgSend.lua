@@ -67,15 +67,17 @@ local function playerConnect(ply)
 end
 
 local function plyFrstSpawn(ply)
-	local form = {
-		["username"] = Discord.hookname,
-		["embeds"] = {{
-			["title"] = "Игрок "..ply:GetName().." ("..ply:SteamID()..") подключился",
-			["color"] = 4915018,
-		}}
-	}
+	if IsValid(ply) then
+		local form = {
+			["username"] = Discord.hookname,
+			["embeds"] = {{
+				["title"] = "Игрок "..ply:Nick().." ("..ply:SteamID()..") подключился",
+				["color"] = 4915018,
+			}}
+		}
 
-	Discord.send(form)
+		Discord.send(form)
+	end
 end
 
 local function plyDisconnect(ply)

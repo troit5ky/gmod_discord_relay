@@ -38,7 +38,7 @@ end
 
 function socket:onMessage(txt)
     local resp = util.JSONToTable(txt)
-    if Discord.debug then 
+    if Discord.debug then
         print("[Discord] Received: ")
         PrintTable(resp)
     end
@@ -46,12 +46,19 @@ function socket:onMessage(txt)
     if resp.op == 10 and resp.t == nil then createHeartbeat() end
     if resp.op == 1 then heartbeat() end
     if resp.d then
-        if resp.t == "MESSAGE_CREATE" && resp.d.channel_id == Discord.readChannelID && resp.d.content != '' then 
+        if resp.t == "MESSAGE_CREATE" && resp.d.channel_id == Discord.readChannelID && resp.d.content != '' then
             if resp.d.author.bot == true then return end
+            if string.sub(resp.d.content, 0, 1) == '!' then
+              command = string.sub(resp.d.content, 2)
+
+              if Discord.commands[command] then Discord.commands[command]() end
+
+              return
+            end
             broadcastMsg({
                 ['author'] = resp.d.author.username,
                 ['content'] = resp.d.content
-            }) 
+            })
         end
     end
 end
@@ -67,32 +74,39 @@ function socket:onConnected()
       "op": 2,
       "d": {
         "token": "]]..Discord.botToken..[[",
+        "compress": true,
         "intents": 512,
-        "status": "dnd",
         "properties": {
           "os": "linux",
-          "browser": "disco",
-          "device": "disco"
+          "browser": "gmod",
+          "device": "pc"
+        },
+        "presence": {
+          "activities": [{
+            "name": "Garry's Mod",
+            "type": 0
+          }]
         }
       }
     }
     ]]
 
-    timer.Simple(2, function() socket:write(req) end)
+    heartbeat()
+    timer.Simple(3, function() socket:write(req) end)
 end
 
 function socket:onDisconnected()
     print("[Discord] WebSocket disconnected")
     timer.Remove('!!discord_hearbeat')
 
-    if Discord.isSocketReloaded != true then 
+    if Discord.isSocketReloaded != true then
         print('[Discord] WebSocket reload in 5 sec...')
         timer.Simple(5, function() socket:open() end)
     end
 end
 
 print('[Discord] Socket init...')
-timer.Simple(3, function() 
+timer.Simple(3, function()
     socket:open()
-    Discord.isSocketReloaded = false 
+    Discord.isSocketReloaded = false
 end)

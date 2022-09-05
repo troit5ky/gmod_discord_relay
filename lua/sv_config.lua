@@ -7,6 +7,11 @@ Discord = {
 
 	['botToken'] = 'token',
 
+	["botPrefix"] = "!",
+
 	-- For developers (logs)
-	['debug'] = false
+	['debug'] = false,
+
+	-- Don't touch!
+	['commands'] = {}
 }
