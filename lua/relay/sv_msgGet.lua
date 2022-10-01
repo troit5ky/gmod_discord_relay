@@ -5,7 +5,7 @@ Discord.isSocketReloaded = false
 
 if Discord.socket != nil then Discord.isSocketReloaded = true; Discord.socket:closeNow(); end
 
-Discord.socket = Discord.socket or GWSockets.createWebSocket("wss://gateway.discord.gg/?encoding=json", true)
+Discord.socket = Discord.socket or GWSockets.createWebSocket("wss://gateway.discord.gg/?encoding=json", false)
 local socket = Discord.socket
 
 local function broadcastMsg(msg)

@@ -2,10 +2,16 @@ require("chttp")
 
 local tmpAvatars = {}
 
+local IsValid = IsValid
+local util_TableToJSON = util.TableToJSON
+local http_Fetch = http.Fetch
+local coroutine_resume = coroutine.resume
+local coroutine_create = coroutine.create
+
 function Discord.send(form) 
 	if type(form) ~= "table" then Error("[Discord] invalid type!") return end
 
-	local json = util.TableToJSON(form)
+	local json = util_TableToJSON(form)
 
 	CHTTP({
 		["failed"] = function(msg)
@@ -19,12 +25,12 @@ function Discord.send(form)
 end
 
 local function getAvatar(id, co)
-	http.Fetch("https://steamcommunity.com/profiles/"..id.."?xml=1", 
+	http_Fetch("https://steamcommunity.com/profiles/"..id.."?xml=1", 
 	function(body)
 		local _, _, url = string.find(body, '<avatarFull>.*.(https://.*)]].*\n.*<vac')
 		tmpAvatars[id] = url
 
-		coroutine.resume(co)
+		coroutine_resume(co)
 	end, 
 	function (msg)
 		Error("[Discord] error getting avatar ("..msg..")")
@@ -34,7 +40,7 @@ end
 local function formMsg(ply, str)
 	local id = tostring(ply:SteamID64())
 
-	local co = coroutine.create(function() 
+	local co = coroutine_create(function() 
 		local form = {
 			["username"] = ply:Nick(),
 			["content"] = str,
@@ -50,7 +56,7 @@ local function formMsg(ply, str)
 	if tmpAvatars[id] == nil then 
 		getAvatar(id, co)
 	else 
-		coroutine.resume(co)
+		coroutine_resume(co)
 	end
 end
 
