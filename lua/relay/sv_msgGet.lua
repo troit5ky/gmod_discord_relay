@@ -27,12 +27,7 @@ end
 
 local function createHeartbeat()
     timer.Create('!!discord_hearbeat', 10, 0, function()
-        socket:write([[
-        {
-            "op": 1,
-            "d": null
-        }
-        ]])
+        heartbeat()
     end)
 end
 
