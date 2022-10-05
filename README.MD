@@ -1,11 +1,17 @@
 # Discord Relay for Garry's Mod
 
-### How to install:
-1. Put [GWSocket](https://github.com/FredyH/GWSockets/releases/) module in `garrysmod/lua/bin/` (create if not exist)
-2. Put [CHTTP](https://github.com/timschumi/gmod-chttp/releases) module in `garrysmod/lua/bin/` (create if not exist)
-3. Put this addon (from release) to `garrysmod/addons/`
-4. Configurate in `discord-realy/lua/cl_config.lua` and `discord-realy/lua/sv_config.lua`
-5. Done! Restart server
+Transmits GMod chat to Discord and Discord chat to GMod.
 
-### Preview
+## Dependencies
+
+- [GWSockets](https://github.com/FredyH/GWSockets/releases/)
+- [CHTTP](https://github.com/timschumi/gmod-chttp/releases)
+
+### Installation guide
+1. Put dependencies into `garrysmod/lua/bin` (create if directory does not exist).
+2. Then download the addon and unpack to `garrysmod/addons`.
+3. Finally, edit `discord-realy/lua/cl_config.lua` and `discord-realy/lua/sv_config.lua` to configure the addon. 
+4. After that you should restart server and voila, it works!
+
+## Preview
 ![preview](preview/1.png)
