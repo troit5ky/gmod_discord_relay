@@ -1,0 +1,36 @@
+name: Lint
+on:
+  push:
+
+jobs:
+  lint:
+    runs-on: 'ubuntu-20.04'
+    steps:
+      - uses: actions/checkout@v2
+
+      # - uses: actions/checkout@v2
+      #   with:
+      #     repository: 'FPtje/GLuaFixer'
+      #     path: glualint-repo
+      #     submodules: 'recursive'
+      #     ref: '1.19.1'
+
+      # - uses: cachix/install-nix-action@v15
+      #   with:
+      #     extra_nix_config: experimental-features = nix-command flakes
+
+      # - name: Compile glualint
+      #   run: |
+      #     cd glualint-repo
+      #     nix develop --command ./AGGenerator.sh
+      #     nix develop --command cabal v1-build
+      #     cp ./dist/build/glualint/glualint $GITHUB_WORKSPACE
+          
+      - name: Download glualint
+        run: |
+          wget -O glualint.zip https://github.com/FPtje/GLuaFixer/releases/download/1.18.3/glualint-1.18.3-linux-stripped.zip
+          unzip glualint.zip
+          rm glualint.zip
+      - name: Run linter
+        run: |
+          ./glualint lint .
