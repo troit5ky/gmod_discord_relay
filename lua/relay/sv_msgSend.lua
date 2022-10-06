@@ -9,13 +9,13 @@ local coroutine_resume = coroutine.resume
 local coroutine_create = coroutine.create
 
 function Discord.send(form) 
-	if type(form) ~= "table" then Error("[Discord] invalid type!") return end
+	if type( form ) ~= "table" then Error( '[Discord] invalid type!' ) return end
 
 	local json = util_TableToJSON(form)
 
 	CHTTP({
-		["failed"] = function(msg)
-			print("[Discord] "..msg)
+		["failed"] = function( msg )
+			print( "[Discord] "..msg )
 		end,
 		["method"] = "POST",
 		["url"] = Discord.webhook,
@@ -25,7 +25,7 @@ function Discord.send(form)
 end
 
 local function getAvatar(id, co)
-	http_Fetch("https://steamcommunity.com/profiles/"..id.."?xml=1", 
+	http_Fetch( "https://steamcommunity.com/profiles/"..id.."?xml=1", 
 	function(body)
 		local _, _, url = string.find(body, '<avatarFull>.*.(https://.*)]].*\n.*<vac')
 		tmpAvatars[id] = url
@@ -34,13 +34,13 @@ local function getAvatar(id, co)
 	end, 
 	function (msg)
 		Error("[Discord] error getting avatar ("..msg..")")
-	end)
+	end )
 end
 
-local function formMsg(ply, str)
-	local id = tostring(ply:SteamID64())
+local function formMsg( ply, str )
+	local id = tostring( ply:SteamID64() )
 
-	local co = coroutine_create(function() 
+	local co = coroutine_create( function() 
 		local form = {
 			["username"] = ply:Nick(),
 			["content"] = str,
@@ -51,16 +51,16 @@ local function formMsg(ply, str)
 		}
 		
 		Discord.send(form)
-	end)
+	end )
 
 	if tmpAvatars[id] == nil then 
-		getAvatar(id, co)
+		getAvatar( id, co )
 	else 
-		coroutine_resume(co)
+		coroutine_resume( co )
 	end
 end
 
-local function playerConnect(ply)
+local function playerConnect( ply )
 	local form = {
 		["username"] = Discord.hookname,
 		["embeds"] = {{

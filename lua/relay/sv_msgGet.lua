@@ -9,10 +9,10 @@ Discord.socket = Discord.socket or GWSockets.createWebSocket("wss://gateway.disc
 local socket = Discord.socket
 
 local function broadcastMsg(msg)
-    print('[Discord] ' .. msg.author..': '.. msg.content)
+    print( '[Discord] ' .. msg.author..': '.. msg.content )
 
-    net.Start("!!discord-receive")
-        net.WriteTable(msg)
+    net.Start( '!!discord-receive' )
+        net.WriteTable( msg )
     net.Broadcast()
 end
 
@@ -26,46 +26,46 @@ local function heartbeat()
 end
 
 local function createHeartbeat()
-    timer.Create('!!discord_hearbeat', 10, 0, function()
+    timer.Create( '!!discord_hearbeat', 10, 0, function()
         heartbeat()
-    end)
+    end )
 end
 
-function socket:onMessage(txt)
-    local resp = util.JSONToTable(txt)
+function socket:onMessage( txt )
+    local resp = util.JSONToTable( txt )
     if not resp then return end
 
     if Discord.debug then
-        print("[Discord] Received: ")
+        print( '[Discord] Received: ' )
         PrintTable(resp)
     end
 
     if resp.op == 10 and resp.t == nil then createHeartbeat() end
     if resp.op == 1 then heartbeat() end
     if resp.d then
-        if resp.t == "MESSAGE_CREATE" && resp.d.channel_id == Discord.readChannelID && resp.d.content != '' then
+        if resp.t == 'MESSAGE_CREATE' && resp.d.channel_id == Discord.readChannelID && resp.d.content != '' then
             if resp.d.author.bot == true then return end
-            if string.sub(resp.d.content, 0, 1) == Discord.botPrefix then
-              command = string.sub(resp.d.content, 2)
+            if string.sub( resp.d.content, 0, 1 ) == Discord.botPrefix then
+              command = string.sub( resp.d.content, 2 )
 
               if Discord.commands[command] then Discord.commands[command]() end
 
               return
             end
             broadcastMsg({
-                ['author'] = resp.d.author.username,
-                ['content'] = resp.d.content
+                [ 'author' ] = resp.d.author.username,
+                [ 'content' ] = resp.d.content
             })
         end
     end
 end
 
-function socket:onError(txt)
-    print("[Discord] Error: ", txt)
+function socket:onError( txt )
+    print( '[Discord] Error: ', txt )
 end
 
 function socket:onConnected()
-	print("[Discord] connected to Discord server")
+	print( '[Discord] connected to Discord server' )
     local req = [[
     {
       "op": 2,
@@ -89,21 +89,21 @@ function socket:onConnected()
     ]]
 
     heartbeat()
-    timer.Simple(3, function() socket:write(req) end)
+    timer.Simple( 3, function() socket:write(req) end )
 end
 
 function socket:onDisconnected()
-    print("[Discord] WebSocket disconnected")
-    timer.Remove('!!discord_hearbeat')
+    print( '[Discord] WebSocket disconnected' )
+    timer.Remove( '!!discord_hearbeat' )
 
     if Discord.isSocketReloaded != true then
-        print('[Discord] WebSocket reload in 5 sec...')
-        timer.Simple(5, function() socket:open() end)
+        print( '[Discord] WebSocket reload in 5 sec...' )
+        timer.Simple( 5, function() socket:open() end )
     end
 end
 
-print('[Discord] Socket init...')
-timer.Simple(3, function()
+print( '[Discord] Socket init...' )
+timer.Simple( 3, function()
     socket:open()
     Discord.isSocketReloaded = false
-end)
+end )
