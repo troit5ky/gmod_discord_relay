@@ -1,4 +1,4 @@
-# Discord Relay for Garry's Mod
+# Discord integration for Garry's Mod
 
 Transmits GMod chat to Discord and Discord chat to GMod.
 
