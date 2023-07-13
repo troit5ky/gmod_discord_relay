@@ -1,17 +1,19 @@
 require("chttp")
 
 local tmpAvatars = {}
+-- for bots
+tmpAvatars['0'] = 'https://images-ext-2.discordapp.net/external/YwK72LAZl5Vw_SEO2s5NWMwXY4hDB1VJ-aAZqV0fkyo/https/i.pinimg.com/236x/28/29/90/2829903219dd1c4b94e0a3528862a940.jpg'
 
 local IsValid = IsValid
 local util_TableToJSON = util.TableToJSON
+local util_SteamIDTo64 = util.SteamIDTo64
 local http_Fetch = http.Fetch
 local coroutine_resume = coroutine.resume
 local coroutine_create = coroutine.create
+local string_find = string.find
 
 function Discord.send(form) 
 	if type( form ) ~= "table" then Error( '[Discord] invalid type!' ) return end
-
-	local json = util_TableToJSON(form)
 
 	CHTTP({
 		["failed"] = function( msg )
@@ -19,15 +21,15 @@ function Discord.send(form)
 		end,
 		["method"] = "POST",
 		["url"] = Discord.webhook,
-		["body"] = json,
-		["type"] = "application/json"
+		["body"] = util_TableToJSON(form),
+		["type"] = "application/json; charset=utf-8"
 	})
 end
 
 local function getAvatar(id, co)
 	http_Fetch( "https://steamcommunity.com/profiles/"..id.."?xml=1", 
 	function(body)
-		local _, _, url = string.find(body, '<avatarFull>.*.(https://.*)]].*\n.*<vac')
+		local _, _, url = string_find(body, '<avatarFull>.*.(https://.*)]].*\n.*<vac')
 		tmpAvatars[id] = url
 
 		coroutine_resume(co)
@@ -61,43 +63,106 @@ local function formMsg( ply, str )
 end
 
 local function playerConnect( ply )
-	local form = {
-		["username"] = Discord.hookname,
-		["embeds"] = {{
-			["title"] = "Игрок "..ply.name.." ("..ply.networkid..") подключается...",
-			["color"] = 16763979,
-		}}
-	}
+	local steamid64 = util_SteamIDTo64( ply.networkid )
 
-	Discord.send(form)
+	local co = coroutine_create( function()
+		local form = {
+			["username"] = Discord.hookname,
+			["embeds"] = {{
+				["author"] = {
+					["name"] = ply.name .. " подключается...",
+					["icon_url"] = tmpAvatars[steamid64],
+					["url"] = 'https://steamcommunity.com/profiles/' .. steamid64,
+				},
+				["color"] = 16763979,
+				["footer"] = {
+					["text"] = ply.networkid,
+				},
+			}},
+			["allowed_mentions"] = {
+				["parse"] = {}
+			},
+		}
+
+		Discord.send(form)
+	end)
+
+	if tmpAvatars[steamid64] == nil then 
+		getAvatar( steamid64, co )
+	else 
+		coroutine_resume( co )
+	end
 end
 
 local function plyFrstSpawn(ply)
 	if IsValid(ply) then
-		local form = {
-			["username"] = Discord.hookname,
-			["embeds"] = {{
-				["title"] = "Игрок "..ply:Nick().." ("..ply:SteamID()..") подключился",
-				["color"] = 4915018,
-			}}
-		}
+		local steamid = ply:SteamID()
+		local steamid64 = util_SteamIDTo64( steamid )
 
-		Discord.send(form)
+		local co = coroutine_create(function()
+			local form = {
+				["username"] = Discord.hookname,
+				["embeds"] = {{
+					["author"] = {
+						["name"] = ply:Nick() .. " подключился",
+						["icon_url"] = tmpAvatars[steamid64],
+						["url"] = 'https://steamcommunity.com/profiles/' .. steamid64,
+					},
+					["color"] = 4915018,
+					["footer"] = {
+						["text"] = steamid,
+					},
+				}},
+				["allowed_mentions"] = {
+					["parse"] = {}
+				},
+			}
+
+			Discord.send(form)
+		end)
+
+		if tmpAvatars[steamid64] == nil then 
+			getAvatar( steamid64, co )
+		else 
+			coroutine_resume( co )
+		end
 	end
 end
 
 local function plyDisconnect(ply)
-	if tmpAvatars[ply.networkid] then tmpAvatars[ply.networkid] = nil end
+	local steamid64 = util_SteamIDTo64( ply.networkid )
 
-	local form = {
-		["username"] = Discord.hookname,
-		["embeds"] = {{
-			["title"] = "Игрок "..ply.name.." ("..ply.networkid..") отключился",
-			["color"] = 16730698,
-		}}
-	}
+	local co = coroutine_create(function()
+		local form = {
+			["username"] = Discord.hookname,
+			["embeds"] = {{
+				["author"] = {
+					["name"] = ply.name .. " отключился",
+					["icon_url"] = tmpAvatars[steamid64],
+					["url"] = 'https://steamcommunity.com/profiles/' .. steamid64,
+				},
+				["description"] = '```' .. ply.reason .. '```',
+				["color"] = 16730698,
+				["footer"] = {
+					["text"] = ply.networkid,
+				},
+			}},
+			["allowed_mentions"] = {
+				["parse"] = {}
+			},
+		}
 
-	Discord.send(form)
+		Discord.send(form)
+
+		tmpAvatars[steamid64] = nil
+	end)
+
+	if tmpAvatars[steamid64] == nil then 
+		getAvatar( steamid64, co )
+	else 
+		coroutine_resume( co )
+	end
+
 end
 
 hook.Add("PlayerSay", "!!discord_sendmsg", formMsg)
