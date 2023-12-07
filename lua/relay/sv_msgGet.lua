@@ -1,6 +1,8 @@
 require("gwsockets")
 util.AddNetworkString("!!discord-receive")
 
+local ipairs = ipairs
+
 Discord.isSocketReloaded = false
 
 if Discord.socket != nil then Discord.isSocketReloaded = true; Discord.socket:closeNow(); end
@@ -43,7 +45,7 @@ function socket:onMessage( txt )
     if resp.op == 10 and resp.t == nil then createHeartbeat() end
     if resp.op == 1 then heartbeat() end
     if resp.d then
-        if resp.t == 'MESSAGE_CREATE' && resp.d.channel_id == Discord.readChannelID && resp.d.content != '' then
+        if resp.t == 'MESSAGE_CREATE' && resp.d.channel_id == Discord.readChannelID then
             if resp.d.author.bot == true then return end
             if string.sub( resp.d.content, 0, 1 ) == Discord.botPrefix then
               command = string.sub( resp.d.content, 2 )
@@ -52,6 +54,19 @@ function socket:onMessage( txt )
 
               return
             end
+            if resp.d.referenced_message then
+                resp.d.content = '[упомянул @' .. resp.d.referenced_message.author.username .. '] ' .. resp.d.content
+            end
+            if resp.d.attachments then 
+            
+                for _, attachment in ipairs(resp.d.attachments) do
+                    if attachment.proxy_url then 
+                        resp.d.content = resp.d.content .. '\n' .. attachment.proxy_url
+                    end
+                end
+
+            end
+            
             broadcastMsg({
                 [ 'author' ] = resp.d.author.username,
                 [ 'content' ] = resp.d.content
