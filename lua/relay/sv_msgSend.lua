@@ -2,7 +2,7 @@ require("chttp")
 
 local tmpAvatars = {}
 -- for bots
-tmpAvatars['0'] = 'https://images-ext-2.discordapp.net/external/YwK72LAZl5Vw_SEO2s5NWMwXY4hDB1VJ-aAZqV0fkyo/https/i.pinimg.com/236x/28/29/90/2829903219dd1c4b94e0a3528862a940.jpg'
+tmpAvatars['0'] = 'https://avatars.cloudflare.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg'
 
 local IsValid = IsValid
 local util_TableToJSON = util.TableToJSON
