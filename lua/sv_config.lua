@@ -11,6 +11,8 @@ Discord = {
 
 	["srvStarted"] = true,
 
+	["hideBots"] = false,
+
 	-- For developers (logs)
 	['debug'] = false,
 

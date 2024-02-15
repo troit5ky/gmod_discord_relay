@@ -65,6 +65,8 @@ end
 local function playerConnect( ply )
 	local steamid64 = util_SteamIDTo64( ply.networkid )
 
+	if Discord.hideBots and (ply.networkid == "BOT") then return end
+
 	local co = coroutine_create( function()
 		local form = {
 			["username"] = Discord.hookname,
@@ -98,6 +100,8 @@ local function plyFrstSpawn(ply)
 	if IsValid(ply) then
 		local steamid = ply:SteamID()
 		local steamid64 = util_SteamIDTo64( steamid )
+
+		if Discord.hideBots and ply:IsBot() then return end
 
 		local co = coroutine_create(function()
 			local form = {
