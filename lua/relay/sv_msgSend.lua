@@ -171,6 +171,8 @@ hook.Add("player_connect", "!!discord_plyConnect", playerConnect)
 hook.Add("PlayerInitialSpawn", "!!discordPlyFrstSpawn", plyFrstSpawn)
 gameevent.Listen( "player_disconnect" )
 hook.Add("player_disconnect", "!!discord_onDisconnect", plyDisconnect)
+
+if Discord.srvStarted then
 hook.Add("Initialize", "!!discord_srvStarted", function() 
 	local form = {
 		["username"] = Discord.hookname,
@@ -184,3 +186,4 @@ hook.Add("Initialize", "!!discord_srvStarted", function()
 	Discord.send(form)
 	hook.Remove("Initialize", "!!discord_srvStarted")
 end)
+end

@@ -9,6 +9,8 @@ Discord = {
 
 	["botPrefix"] = "!",
 
+	["srvStarted"] = true,
+
 	-- For developers (logs)
 	['debug'] = false,
 
