@@ -13,6 +13,8 @@ Discord = {
 
 	["hideBots"] = false,
 
+	["language"] = "ru",
+
 	-- For developers (logs)
 	['debug'] = false,
 
