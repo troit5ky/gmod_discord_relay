@@ -136,6 +136,8 @@ end
 local function plyDisconnect(ply)
 	local steamid64 = util_SteamIDTo64( ply.networkid )
 
+	if Discord.hideBots and (ply.networkid == "BOT") then return end
+
 	local co = coroutine_create(function()
 		local form = {
 			["username"] = Discord.hookname,
