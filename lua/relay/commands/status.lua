@@ -13,13 +13,7 @@ Discord.commands['status'] = function()
         ['embeds'] = {{
             ['color'] = 5793266,
             ['title'] = GetHostName(),
-            ['description'] = [[
-DiscordString.connect - steam://connect/]] .. game.GetIPAddress() .. [[
-
-DiscordString.currentMap - ]] .. game.GetMap() .. [[
-
-DiscordString.players - ]] .. plys .. [[
-            ]],
+            ['description'] = DiscordString.connect .. " - steam://connect/" .. game.GetIPAddress() .. "\n" .. DiscordString.currentMap .. " - " .. game.GetMap() .. "\n" .. DiscordString.players .. " - " .. plys,
             ['fields'] = {{
                 ['name'] = DiscordString.playerList,
                 ['value'] = plyList
