@@ -9,6 +9,12 @@ Discord = {
 
 	["botPrefix"] = "!",
 
+	["srvStarted"] = true,
+
+	["hideBots"] = false,
+
+	["language"] = "ru",
+
 	-- For developers (logs)
 	['debug'] = false,
 

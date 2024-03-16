@@ -7,21 +7,15 @@ Discord.commands['status'] = function()
         for num, ply in ipairs(plysTable) do
             plyList = plyList .. ply:Nick() .. '\n'
         end
-    else plyList = 'никого ¯\\_(ツ)_/¯' end
+    else plyList = DiscordString.nobody .. '¯\\_(ツ)_/¯' end
 
     local form = {
         ['embeds'] = {{
             ['color'] = 5793266,
             ['title'] = GetHostName(),
-            ['description'] = [[
-**Подключиться** - steam://connect/]] .. game.GetIPAddress() .. [[
-
-**Карта сейчас** - ]] .. game.GetMap() .. [[
-
-**Игроков** - ]] .. plys .. [[
-            ]],
+            ['description'] = DiscordString.connect .. " - steam://connect/" .. game.GetIPAddress() .. "\n" .. DiscordString.currentMap .. " - " .. game.GetMap() .. "\n" .. DiscordString.players .. " - " .. plys,
             ['fields'] = {{
-                ['name'] = 'Список игроков',
+                ['name'] = DiscordString.playerList,
                 ['value'] = plyList
             }}
         }}

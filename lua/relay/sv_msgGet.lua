@@ -55,7 +55,7 @@ function socket:onMessage( txt )
               return
             end
             if resp.d.referenced_message then
-                resp.d.content = '[упомянул @' .. resp.d.referenced_message.author.username .. '] ' .. resp.d.content
+                resp.d.content = '[' .. DiscordString.mentioned .. ' @' .. resp.d.referenced_message.author.username .. '] ' .. resp.d.content
             end
             if resp.d.attachments then 
             

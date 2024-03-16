@@ -2,7 +2,7 @@ require("chttp")
 
 local tmpAvatars = {}
 -- for bots
-tmpAvatars['0'] = 'https://images-ext-2.discordapp.net/external/YwK72LAZl5Vw_SEO2s5NWMwXY4hDB1VJ-aAZqV0fkyo/https/i.pinimg.com/236x/28/29/90/2829903219dd1c4b94e0a3528862a940.jpg'
+tmpAvatars['0'] = 'https://avatars.cloudflare.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg'
 
 local IsValid = IsValid
 local util_TableToJSON = util.TableToJSON
@@ -65,12 +65,14 @@ end
 local function playerConnect( ply )
 	local steamid64 = util_SteamIDTo64( ply.networkid )
 
+	if Discord.hideBots and (ply.networkid == "BOT") then return end
+
 	local co = coroutine_create( function()
 		local form = {
 			["username"] = Discord.hookname,
 			["embeds"] = {{
 				["author"] = {
-					["name"] = ply.name .. " подключается...",
+					["name"] = ply.name .. DiscordString.connecting,
 					["icon_url"] = tmpAvatars[steamid64],
 					["url"] = 'https://steamcommunity.com/profiles/' .. steamid64,
 				},
@@ -99,12 +101,14 @@ local function plyFrstSpawn(ply)
 		local steamid = ply:SteamID()
 		local steamid64 = util_SteamIDTo64( steamid )
 
+		if Discord.hideBots and ply:IsBot() then return end
+
 		local co = coroutine_create(function()
 			local form = {
 				["username"] = Discord.hookname,
 				["embeds"] = {{
 					["author"] = {
-						["name"] = ply:Nick() .. " подключился",
+						["name"] = ply:Nick() .. DiscordString.connected,
 						["icon_url"] = tmpAvatars[steamid64],
 						["url"] = 'https://steamcommunity.com/profiles/' .. steamid64,
 					},
@@ -132,12 +136,14 @@ end
 local function plyDisconnect(ply)
 	local steamid64 = util_SteamIDTo64( ply.networkid )
 
+	if Discord.hideBots and (ply.networkid == "BOT") then return end
+
 	local co = coroutine_create(function()
 		local form = {
 			["username"] = Discord.hookname,
 			["embeds"] = {{
 				["author"] = {
-					["name"] = ply.name .. " отключился",
+					["name"] = ply.name .. DiscordString.disconnected,
 					["icon_url"] = tmpAvatars[steamid64],
 					["url"] = 'https://steamcommunity.com/profiles/' .. steamid64,
 				},
@@ -171,12 +177,14 @@ hook.Add("player_connect", "!!discord_plyConnect", playerConnect)
 hook.Add("PlayerInitialSpawn", "!!discordPlyFrstSpawn", plyFrstSpawn)
 gameevent.Listen( "player_disconnect" )
 hook.Add("player_disconnect", "!!discord_onDisconnect", plyDisconnect)
+
+if Discord.srvStarted then
 hook.Add("Initialize", "!!discord_srvStarted", function() 
 	local form = {
 		["username"] = Discord.hookname,
 		["embeds"] = {{
-			["title"] = "Сервер запущен!",
-			["description"] = "Карта сейчас - " .. game.GetMap(),
+			["title"] = DiscordString.serverStarted,
+			["description"] = DiscordString.currentMapAlt .. game.GetMap(),
 			["color"] = 5793266
 		}}
 	}
@@ -184,3 +192,4 @@ hook.Add("Initialize", "!!discord_srvStarted", function()
 	Discord.send(form)
 	hook.Remove("Initialize", "!!discord_srvStarted")
 end)
+end

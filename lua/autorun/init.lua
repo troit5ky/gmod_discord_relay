@@ -3,6 +3,12 @@ if SERVER then
 	include("relay/sv_msgSend.lua")
 	include("relay/sv_msgGet.lua")
 
+	if Discord.language == "en" then
+		include("relay/translations/en.lua")
+	else
+		include("relay/translations/ru.lua")
+	end
+
 	-- commands
 	local files, _ = file.Find( 'relay/commands/' .. "*", "LUA" )
 
