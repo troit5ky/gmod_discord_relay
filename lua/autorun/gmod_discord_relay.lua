@@ -1,5 +1,5 @@
 if SERVER then 
-	include("sv_config.lua")
+	include("relay/sv_config.lua")
 	include("relay/sv_msgSend.lua")
 	include("relay/sv_msgGet.lua")
 
@@ -18,7 +18,7 @@ if SERVER then
 	end
 	--
 
-	AddCSLuaFile('cl_config.lua')
+	AddCSLuaFile('relay/cl_config.lua')
 	AddCSLuaFile('relay/cl_msgReceive.lua')
 
 	print( "----------------------\n" )
@@ -27,6 +27,6 @@ if SERVER then
 end
 
 if CLIENT then 
-	include('cl_config.lua')
+	include('relay/cl_config.lua')
 	include('relay/cl_msgReceive.lua')
 end
