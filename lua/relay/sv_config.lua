@@ -11,6 +11,8 @@ Discord = {
 
 	["srvStarted"] = true,
 
+	["srvShutdown"] = true,
+
 	["hideBots"] = false,
 
 	["language"] = "ru",

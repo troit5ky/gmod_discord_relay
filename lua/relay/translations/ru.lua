@@ -11,5 +11,6 @@ DiscordString = {
 	["connected"] = " подключился",
 	["disconnected"] = " отключился",
 	["serverStarted"] = "Сервер запущен!",
+	["serverShutdown"] = "Сервер выключился",
 	["currentMapAlt"] = "Карта сейчас - "
 }

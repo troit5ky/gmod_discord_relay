@@ -179,17 +179,32 @@ gameevent.Listen( "player_disconnect" )
 hook.Add("player_disconnect", "!!discord_onDisconnect", plyDisconnect)
 
 if Discord.srvStarted then
-hook.Add("Initialize", "!!discord_srvStarted", function() 
-	local form = {
-		["username"] = Discord.hookname,
-		["embeds"] = {{
-			["title"] = DiscordString.serverStarted,
-			["description"] = DiscordString.currentMapAlt .. game.GetMap(),
-			["color"] = 5793266
-		}}
-	}
+	hook.Add("Initialize", "!!discord_srvStarted", function() 
+		local form = {
+			["username"] = Discord.hookname,
+			["embeds"] = {{
+				["title"] = DiscordString.serverStarted,
+				["description"] = DiscordString.currentMapAlt .. game.GetMap(),
+				["color"] = 5793266
+			}}
+		}
 
-	Discord.send(form)
-	hook.Remove("Initialize", "!!discord_srvStarted")
-end)
+		Discord.send(form)
+		hook.Remove("Initialize", "!!discord_srvStarted")
+	end)
+end
+if Discord.srvShutdown then
+	hook.Add("ShutDown", "!!discord_srvShutdown", function() 
+		local form = {
+			["username"] = Discord.hookname,
+			["embeds"] = {{
+				["title"] = DiscordString.serverShutdown,
+				["description"] = '',
+				["color"] = 16730698
+			}}
+		}
+
+		Discord.send(form)
+		hook.Remove("Initialize", "!!discord_srvShutdown")
+	end)
 end

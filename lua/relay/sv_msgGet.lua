@@ -122,3 +122,8 @@ timer.Simple( 3, function()
     socket:open()
     Discord.isSocketReloaded = false
 end )
+
+-- request (lag when changelevel)
+hook.Add("ShutDown", "!!discord_srvShutdown_socketdown", function() 
+    socket:closeNow()
+end)
