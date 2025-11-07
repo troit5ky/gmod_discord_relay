@@ -39,7 +39,8 @@ local function getAvatar(id, co)
 	end )
 end
 
-local function formMsg( ply, str )
+local function formMsg(ply, str, _, isLocal)
+    if isLocal then return end -- The so-called GDPR compliance
 	local id = tostring( ply:SteamID64() )
 
 	local co = coroutine_create( function() 
