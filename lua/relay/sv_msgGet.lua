@@ -26,9 +26,6 @@ local function heartbeat()
     }
     ]])
 end
-local function getGuildnick(id)
-
-end
 local function createHeartbeat()
     timer.Create( '!!discord_hearbeat', 10, 0, function()
         heartbeat()
