@@ -26,7 +26,9 @@ local function heartbeat()
     }
     ]])
 end
+local function getGuildnick(id)
 
+end
 local function createHeartbeat()
     timer.Create( '!!discord_hearbeat', 10, 0, function()
         heartbeat()
@@ -66,11 +68,8 @@ function socket:onMessage( txt )
                 end
 
             end
-            
-            broadcastMsg({
-                [ 'author' ] = resp.d.author.global_name or resp.d.author.username, 
-                [ 'content' ] = resp.d.content
-            })
+            local ilovediscordAPI = resp.d.member and resp.d.member.nick or resp.d.author.global_name or resp.d.author.username
+            broadcastMsg({ ['author'] = ilovediscordAPI, ['content'] = resp.d.content })
         end
     end
 end
@@ -81,13 +80,15 @@ end
 
 function socket:onConnected()
 	print( '[Discord] connected to Discord server' )
+    -- intents == 514 is needed due to guild members and messages
+    -- (GUILD_MEMBERS and message intent)
     local req = [[
     {
       "op": 2,
       "d": {
         "token": "]]..Discord.botToken..[[",
         "compress": true,
-        "intents": 512,
+        "intents": 514, 
         "properties": {
           "os": "linux",
           "browser": "gmod",
