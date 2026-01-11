@@ -1,11 +1,11 @@
 Discord = {
-	['webhook'] = "paste_url",
+	['webhook'] = "webhook", -- REPLACE THIS
 	
 	['hookname'] = "Gmod Relay",
 
-	['readChannelID'] = "channel_ID_for_get_msg",
+	['readChannelID'] = "channelid", -- REPLACE THIS
 
-	['botToken'] = 'token',
+	['botToken'] = 'bottoken', -- REPLACE THIS
 
 	["botPrefix"] = "!",
 
@@ -13,13 +13,14 @@ Discord = {
 
 	["srvShutdown"] = true,
 
-	["hideBots"] = false,
+	["hideBots"] = true,
 
-	["language"] = "ru",
+	["language"] = "en",
 
 	-- For developers (logs)
 	['debug'] = false,
 
-	-- Don't touch!
+	-- !!!!!!!!Don't touch, meant for transient storage of the commands executed by user.!!!!!!!!
+	-- !!!!!!!!If touched WILL lead to the bot breaking!!!!!!!!
 	['commands'] = {}
 }

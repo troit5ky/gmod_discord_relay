@@ -10,7 +10,7 @@ Transmits GMod chat to Discord and Discord chat to GMod.
 ### Installation guide
 1. Put dependencies into `garrysmod/lua/bin` (create if directory does not exist).
 2. Then download the addon and unpack to `garrysmod/addons`.
-3. Finally, edit `discord-realy/lua/cl_config.lua` and `discord-realy/lua/sv_config.lua` to configure the addon. 
+3. Finally, edit `gmod_discord_relay/lua/cl_config.lua` and `gmod_discord_relay/lua/sv_config.lua` to configure the addon. 
 4. After that you should restart server and voila, it works!
 
 ### Discord bot settings
@@ -18,4 +18,5 @@ Transmits GMod chat to Discord and Discord chat to GMod.
 ![preview](preview/perm2.png)
 
 ## Preview
-![preview](preview/1.png)
+![discordpreview](preview/1.png)
+![gmodpreview](preview/2.png)
