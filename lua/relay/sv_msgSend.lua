@@ -30,7 +30,7 @@ local function getAvatar(id, co)
 	http_Fetch( "https://steamcommunity.com/profiles/"..id.."?xml=1", 
 	function(body)
 		body = string.sub(body, 1, 1500) -- try to fix issue #11
-		local _, _, url = string_find(body, '<avatarFull>.+?(https://.+)\n.+?<vac')
+		local _, _, url = string_find(body, '<avatarFull>.*.(https://.*)]].*\n.*<vac')
 		tmpAvatars[id] = url
 
 		coroutine_resume(co)
