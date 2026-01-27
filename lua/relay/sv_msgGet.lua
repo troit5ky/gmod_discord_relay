@@ -65,8 +65,8 @@ function socket:onMessage( txt )
                 end
 
             end
-            local ilovediscordAPI = resp.d.member and resp.d.member.nick or resp.d.author.global_name or resp.d.author.username
-            broadcastMsg({ ['author'] = ilovediscordAPI, ['content'] = resp.d.content })
+            local authorName = resp.d.member and resp.d.member.nick or resp.d.author.global_name or resp.d.author.username
+            broadcastMsg({ ['author'] = authorName ['content'] = resp.d.content })
         end
     end
 end
