@@ -2,12 +2,9 @@ name: GLua Lint
 run-name: lint
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  - push
+  - pull_request
+  
 jobs:
   lint:
     runs-on: ubuntu-latest
