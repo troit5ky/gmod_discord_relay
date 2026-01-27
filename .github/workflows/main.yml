@@ -1,2 +1,0 @@
-- name: GLua Linter
-  uses: talemke/action-glua-lint@v1.1.4
