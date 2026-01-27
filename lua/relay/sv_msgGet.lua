@@ -66,7 +66,7 @@ function socket:onMessage( txt )
 
             end
             local authorName = resp.d.member and resp.d.member.nick or resp.d.author.global_name or resp.d.author.username
-            broadcastMsg({ ['author'] = authorName ['content'] = resp.d.content })
+            broadcastMsg({ ['author'] = authorName, ['content'] = resp.d.content })
         end
     end
 end
